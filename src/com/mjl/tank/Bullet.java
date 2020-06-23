@@ -19,6 +19,7 @@ public class Bullet {
     private  boolean living = true;//子弹还在屏幕内,是否活着
     private TankFrame tf = null;
     private Group group = Group.BAD;
+    Rectangle rectangle = new Rectangle();
 
     public Bullet(int x, int y, Dir dir,Group group,TankFrame tf) {
         this.x = x;
@@ -26,6 +27,10 @@ public class Bullet {
         this.dir = dir;
         this.group = group;
         this.tf = tf;
+        rectangle.x = this.x;
+        rectangle.y = this.y;
+        rectangle.width = WIDTH;
+        rectangle.height = HEIGHT;
     }
     public void paint(Graphics g) {
         if (!living) tf.bullets.remove(this);//子弹飞出屏幕，删除子弹
@@ -62,6 +67,10 @@ public class Bullet {
             default:
                 break;
         }
+
+        rectangle.x = this.x;
+        rectangle.y = this.y;
+
         if (x<0 || y<0 || x>TankFrame.GAME_WIDTH || y>TankFrame.GAME_HEIGHT){
              living = false;
         }
@@ -72,7 +81,7 @@ public class Bullet {
         //TODO 用一个rect来记录子弹位置
         Rectangle rect1 = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
         Rectangle rect2 = new Rectangle(tank.getX(),tank.getY() ,Tank.WIDTH,Tank.HEIGHT);
-        if (rect1.intersects(rect2)){
+        if (rectangle.intersects(tank.rectangle)){
             tank.die();
             this.die();
             tf.explodes.add(new Explode(tank.getX(),tank.getY() ,tf));
