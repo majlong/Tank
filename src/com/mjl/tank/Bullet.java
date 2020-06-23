@@ -12,7 +12,8 @@ import java.awt.*;
  */
 public class Bullet {
     private static final int SPEED = 10;//子弹速度
-    private static final int WIDTH = 10, HEIGHT = 10;// 子弹大小
+    public static final int WIDTH = ResourceMgr.bulletD.getWidth();
+    public static final int HEIGHT = ResourceMgr.bulletD.getHeight();// 子弹大小
     private int x,y;//坐标
     private Dir dir;  //子弹方向
     private  boolean live = true;//子弹还在屏幕内
