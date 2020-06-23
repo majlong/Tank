@@ -1,4 +1,4 @@
-package com.mjl;
+package com.mjl.tank;
 
 public class Main {
 
