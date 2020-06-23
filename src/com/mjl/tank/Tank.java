@@ -4,6 +4,7 @@ import com.mjl.ResourceMgr;
 
 import java.awt.*;
 import java.lang.annotation.Retention;
+import java.util.Random;
 
 /**
  * @Auther: mjl
@@ -14,17 +15,22 @@ import java.lang.annotation.Retention;
 public class Tank {
     private int x,y;
     private Dir dir = Dir.UP ;//方向
-    private static final int SPEED = 5;
+    private static final int SPEED = 2;
     public static final int WIDTH = ResourceMgr.tankD.getWidth();
     public static final int HEIGHT = ResourceMgr.tankD.getHeight();// 坦克大小
-    private boolean moving = false;//tank是移动还是静止
+    private boolean moving = true;//tank是移动还是静止
+
+    private Random random = new Random();
+
     private boolean living = true;//tank死活
     private TankFrame tf;
+    private Group group = Group.BAD;
 
-    public Tank(int x, int y, Dir dir,TankFrame tf) {
+    public Tank(int x, int y, Dir dir,Group group,TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.group = group;
         this.tf = tf;
     }
 
@@ -65,12 +71,18 @@ public class Tank {
             default:
                 break;
         }
+         if (random.nextInt(10) > 8) this.fire();
     }
     public void fire() {
         int bX =    this.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
         int bY =    this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
-        tf.bullets.add( new Bullet(bX,bY,this.dir,this.tf));
+        tf.bullets.add( new Bullet(bX,bY,this.dir,this.group,this.tf));
     }
+
+    public void die() {
+        this.living = false;
+    }
+
     public int getX() {
         return x;
     }
@@ -107,8 +119,13 @@ public class Tank {
         this.moving = moving;
     }
 
-
-    public void die() {
-        this.living = false;
+    public Group getGroup() {
+        return group;
     }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+
 }
