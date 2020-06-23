@@ -16,7 +16,7 @@ public class Bullet {
     public static final int HEIGHT = ResourceMgr.bulletD.getHeight();// 子弹大小
     private int x,y;//坐标
     private Dir dir;  //子弹方向
-    private  boolean live = true;//子弹还在屏幕内
+    private  boolean living = true;//子弹还在屏幕内,是否活着
     private TankFrame tf = null;
 
     public Bullet(int x, int y, Dir dir,TankFrame tf) {
@@ -26,7 +26,7 @@ public class Bullet {
         this.tf = tf;
     }
     public void paint(Graphics g) {
-        if (!live) tf.bullets.remove(this);//子弹飞出屏幕，删除子弹
+        if (!living) tf.bullets.remove(this);//子弹飞出屏幕，删除子弹
         switch (dir){
             case LEFT:
                 g.drawImage(ResourceMgr.bulletL,x,y,null);
@@ -61,7 +61,20 @@ public class Bullet {
                 break;
         }
         if (x<0 || y<0 || x>TankFrame.GAME_WIDTH || y>TankFrame.GAME_HEIGHT){
-             live = false;
+             living = false;
         }
+    }
+    //子弹和坦克碰撞检测
+    public void collideWith(Tank tank) {
+        Rectangle rect1 = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
+        Rectangle rect2 = new Rectangle(tank.getX(),tank.getY() ,Tank.WIDTH,Tank.HEIGHT);
+        if (rect1.intersects(rect2)){
+            tank.die();
+            this.die();
+        }
+    }
+
+    private void die() {
+        this.living = false;
     }
 }

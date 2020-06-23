@@ -3,6 +3,7 @@ package com.mjl.tank;
 import com.mjl.ResourceMgr;
 
 import java.awt.*;
+import java.lang.annotation.Retention;
 
 /**
  * @Auther: mjl
@@ -17,6 +18,7 @@ public class Tank {
     public static final int WIDTH = ResourceMgr.tankD.getWidth();
     public static final int HEIGHT = ResourceMgr.tankD.getHeight();// 坦克大小
     private boolean moving = false;//tank是移动还是静止
+    private boolean living = true;//tank死活
     private TankFrame tf;
 
     public Tank(int x, int y, Dir dir,TankFrame tf) {
@@ -27,7 +29,7 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        Color color = g.getColor();
+        if (!living) tf.tanks.remove(this);
         switch (dir){
             case LEFT:
                 g.drawImage(ResourceMgr.tankL,x,y,null);
@@ -106,4 +108,7 @@ public class Tank {
     }
 
 
+    public void die() {
+        this.living = false;
+    }
 }
