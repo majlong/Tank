@@ -1,7 +1,5 @@
 package com.mjl.tank;
 
-import com.mjl.ResourceMgr;
-
 import java.awt.*;
 
 /**

@@ -1,7 +1,4 @@
-package com.mjl;
-
-import com.mjl.tank.Bullet;
-import com.mjl.tank.ImageUtil;
+package com.mjl.tank;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

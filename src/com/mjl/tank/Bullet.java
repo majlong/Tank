@@ -1,7 +1,5 @@
 package com.mjl.tank;
 
-import com.mjl.ResourceMgr;
-
 import java.awt.*;
 
 /**
@@ -31,6 +29,7 @@ public class Bullet {
         rectangle.y = this.y;
         rectangle.width = WIDTH;
         rectangle.height = HEIGHT;
+        tf.bullets.add(this);//把自己加到bullets队列里面去
     }
     public void paint(Graphics g) {
         if (!living) tf.bullets.remove(this);//子弹飞出屏幕，删除子弹
@@ -79,8 +78,8 @@ public class Bullet {
     public void collideWith(Tank tank) {
         if (this.group == tank.getGroup()) return;
         //TODO 用一个rect来记录子弹位置
-        Rectangle rect1 = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
-        Rectangle rect2 = new Rectangle(tank.getX(),tank.getY() ,Tank.WIDTH,Tank.HEIGHT);
+        //Rectangle rect1 = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
+        //Rectangle rect2 = new Rectangle(tank.getX(),tank.getY() ,Tank.WIDTH,Tank.HEIGHT);
         if (rectangle.intersects(tank.rectangle)){
             tank.die();
             this.die();

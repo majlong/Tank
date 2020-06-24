@@ -18,7 +18,7 @@ public class PropertyMgr {
             e.printStackTrace();
         }
     }
-
+    private PropertyMgr(){}
     public static Object get(String key){
         if (props ==null) return null;
         return props.get(key);

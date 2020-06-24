@@ -1,9 +1,7 @@
 package com.mjl.tank;
 
-import com.mjl.ResourceMgr;
-
 import java.awt.*;
-import java.lang.annotation.Retention;
+import java.util.Properties;
 import java.util.Random;
 
 /**
@@ -13,8 +11,8 @@ import java.util.Random;
  * @version: 1.0
  */
 public class Tank {
-    private int x,y;
-    private Dir dir = Dir.UP ;//方向
+    int x,y;
+    Dir dir = Dir.UP ;//方向
     private static final int SPEED = 2;
     public static final int WIDTH = ResourceMgr.goodTankD.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankD.getHeight();// 坦克大小
@@ -23,11 +21,14 @@ public class Tank {
     private Random random = new Random();
 
     private boolean living = true;//tank死活
-    private TankFrame tf;
-    private Group group = Group.BAD;
+    TankFrame tf;
+    Group group = Group.BAD;
 
     Rectangle rectangle = new Rectangle();
 
+    //FireStrategy fs = new DefaultFireStrategy();//开火策略--默认
+    //FireStrategy fs = new FourDirFireStrategy();//开火策略--主站坦克4个方向开火
+    FireStrategy fs;
     public Tank(int x, int y, Dir dir,Group group,TankFrame tf) {
         this.x = x;
         this.y = y;
@@ -38,6 +39,21 @@ public class Tank {
         rectangle.y = this.y;
         rectangle.width = WIDTH;
         rectangle.height = HEIGHT;
+
+        //if (group == Group.GOOD) fs = new FourDirFireStrategy();//开火策略--四个方向
+        //坦克开火策略也可以从配置文件中读取(对更改关闭，对扩展开放)
+        if (group == Group.GOOD){
+            try {
+                Class<?> goodStrategy = Class.forName(PropertyMgr.get("GoodStrategy") + "");
+                fs = (FireStrategy)goodStrategy.newInstance();
+                //fs = (FireStrategy)goodStrategy.getDeclaredConstructor().newInstance();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        if (group == Group.BAD) fs = new DefaultFireStrategy();//开火策略--默认
     }
 
     public void paint(Graphics g) {
@@ -56,6 +72,7 @@ public class Tank {
                 g.drawImage(this.group == Group.GOOD? ResourceMgr.goodTankD : ResourceMgr.badTankD,x,y,null);
                 break;
         }
+
        move();
     }
 
@@ -105,11 +122,23 @@ public class Tank {
 
     }
 
-    public void fire() {
-        int bX =    this.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
-        int bY =    this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
-        tf.bullets.add( new Bullet(bX,bY,this.dir,this.group,this.tf));
-        if(this.group == Group.GOOD) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
+    /**
+     * //策略可以当做参数传进来（每次都要new），也可以是成员变量
+     * 成员变量作用域是整个类，会使类变得复杂；当做参数时，作用域只是方法体
+     * 一般能传参数就传参数，但是传参数会带来每次传的时候都new对象的问题，这个时候可以做成单例这里DefaultFireStrategy可以做成单例
+     *
+     * @param fireStrategy
+     */
+//    public void fire(FireStrategy fireStrategy) {//策略可以当做参数传进来（没次都要new），也可以是成员变量
+//
+//
+//    }
+
+    /**
+     * 开火方法，这里策略用成员变量的方式
+     */
+    public void fire(){
+        fs.fire(this);
     }
 
     public void die() {
