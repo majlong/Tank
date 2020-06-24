@@ -10,7 +10,7 @@ import java.awt.*;
  * @Description: com.mjl
  * @version: 1.0
  */
-public class Bullet extends BaseBullet {
+public class RectBullet extends BaseBullet {
     private static final int SPEED = 10;//子弹速度
     public static final int WIDTH = ResourceMgr.bulletD.getWidth();
     public static final int HEIGHT = ResourceMgr.bulletD.getHeight();// 子弹大小
@@ -21,7 +21,7 @@ public class Bullet extends BaseBullet {
     private Group group = Group.BAD;
     Rectangle rectangle = new Rectangle();
 
-    public Bullet(int x, int y, Dir dir,Group group,TankFrame tf) {
+    public RectBullet(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -36,7 +36,7 @@ public class Bullet extends BaseBullet {
     @Override
     public void paint(Graphics g) {
         if (!living) tf.bullets.remove(this);//子弹飞出屏幕，删除子弹
-        switch (dir){
+        /*switch (dir){
             case LEFT:
                 g.drawImage(ResourceMgr.bulletL,x,y,null);
                 break;
@@ -49,7 +49,11 @@ public class Bullet extends BaseBullet {
             case DOWN:
                 g.drawImage(ResourceMgr.bulletD,x,y,null);
                 break;
-        }
+        }*/
+        Color color = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.fillRect(x,y,20,20);
+        g.setColor(color);
         move();
     }
     private void move() {

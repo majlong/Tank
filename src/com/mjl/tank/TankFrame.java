@@ -1,5 +1,7 @@
 package com.mjl.tank;
 
+import com.mjl.tank.abstractfactory.*;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -19,9 +21,14 @@ public class TankFrame extends Frame {
 
     Tank tank = new Tank(200, 400, Dir.UP,Group.GOOD,this);
     //Bullet bullet = new Bullet(300, 300, Dir.UP);
-    List<Bullet> bullets = new ArrayList<Bullet>();
+    //List<Bullet> bullets = new ArrayList<Bullet>();
     List<Tank> tanks = new ArrayList<Tank>();
-    List<Explode> explodes = new ArrayList<>();
+    //List<Explode> explodes = new ArrayList<>();//
+    List<BaseBullet> bullets = new ArrayList<>();//替换成抽象工厂方式生产
+    //List<BaseTank> tanks = new ArrayList<>();//替换成抽象工厂方式生产
+    List<BaseExplode> explodes = new ArrayList<>();//替换成抽象工厂方式生产
+    //GameFactory gameFactory = new DefaultFactory();//默认爆炸效果
+    GameFactory gameFactory = new RectFactory();//方形爆炸效果
 
    // Explode e = new Explode(100,100,this);
 

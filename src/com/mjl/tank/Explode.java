@@ -1,5 +1,7 @@
 package com.mjl.tank;
 
+import com.mjl.tank.abstractfactory.BaseExplode;
+
 import java.awt.*;
 
 /**
@@ -8,7 +10,7 @@ import java.awt.*;
  * @Description: 爆炸效果类
  * @version: 1.0
  */
-public class Explode {
+public class Explode extends BaseExplode {
     public static final int WIDTH = ResourceMgr.explodes[0].getWidth();
     public static final int HEIGHT = ResourceMgr.explodes[0].getHeight();
     private int x, y;//坐标
@@ -23,7 +25,7 @@ public class Explode {
         this.tf = tf;
         new Thread(()->new Audio("audio/explode.wav").play()).start();
     }
-
+    @Override
     public void paint(Graphics g) {
         g.drawImage(ResourceMgr.explodes[step++], x, y, null);
         if (step >= ResourceMgr.explodes.length)
